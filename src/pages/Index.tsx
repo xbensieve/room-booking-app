@@ -2,6 +2,8 @@ import React from "react";
 import Header from "@/components/Header";
 import SearchBar from "@/components/SearchBar";
 import RoomCard from "@/components/RoomCard";
+import { Button } from "@/components/ui/button";
+
 import { Star, Shield, Award, Headphones } from "lucide-react";
 
 const Index = () => {
@@ -75,6 +77,24 @@ const Index = () => {
             Đặt phòng khách sạn cao cấp với giá tốt nhất. Trải nghiệm dịch vụ 5
             sao cùng không gian sang trọng.
           </p>
+          <div className="flex justify-center gap-4 mb-8">
+            <a href="/login">
+              <Button
+                variant="secondary"
+                className="bg-white text-blue-700 hover:bg-gray-100"
+              >
+                Đăng nhập
+              </Button>
+            </a>
+            <a href="/register">
+              <Button
+                variant="outline"
+                className="bg-white text-blue-700 hover:bg-gray-100"
+              >
+                Đăng ký
+              </Button>
+            </a>
+          </div>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <div className="flex items-center space-x-2">
               <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
