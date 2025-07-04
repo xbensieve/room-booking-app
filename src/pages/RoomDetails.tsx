@@ -15,15 +15,15 @@ import { Badge } from "@/components/ui/badge";
 import Header from "@/components/Header";
 import BookingForm from "@/components/BookingForm";
 
-const RoomDetails = () => {
+const RoomDetails: React.FC = () => {
   const room = {
     id: 1,
     name: "Phòng Deluxe Giường Đôi",
     images: [
-      "/placeholder.svg",
-      "/placeholder.svg",
-      "/placeholder.svg",
-      "/placeholder.svg",
+      "https://bizweb.dktcdn.net/100/514/927/products/phong-deluxe-giuong-doi-co-ban-cong-va-tam-nhin-ra-thanh-pho-khach-san-phan-van.jpg?v=1730963722513",
+      "https://vinapad.com/wp-content/uploads/2019/03/phong-deluxe-2.jpg",
+      "https://rosevalleydalat.com/wp-content/uploads/2018/03/deluxe-family-1.jpg",
+      "https://www.lionhotel.vn/files/branch/room/f_69_IMG_5366.jpg",
     ],
     price: 1500000,
     rating: 4.8,
@@ -44,71 +44,73 @@ const RoomDetails = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-100">
       <Header />
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Thông tin phòng */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-lg shadow-md overflow-hidden">
+            <div className="bg-white rounded-xl shadow-xl overflow-hidden animate-fade-in">
               {/* Hình ảnh phòng */}
               <div className="relative">
                 <img
                   src={room.images[0]}
                   alt={room.name}
-                  className="w-full h-64 md:h-80 object-cover"
+                  className="w-full h-72 md:h-96 object-cover"
                 />
                 <div className="absolute top-4 right-4">
-                  <Badge className="bg-blue-600 text-white">
+                  <Badge className="bg-amber-500 text-gray-900 font-semibold px-3 py-1">
                     Phổ biến nhất
                   </Badge>
                 </div>
               </div>
 
               {/* Grid hình ảnh nhỏ */}
-              <div className="grid grid-cols-3 gap-2 p-4">
+              <div className="grid grid-cols-3 gap-3 p-6">
                 {room.images.slice(1).map((image, index) => (
                   <img
                     key={index}
                     src={image}
                     alt={`${room.name} ${index + 2}`}
-                    className="w-full h-20 object-cover rounded cursor-pointer hover:opacity-80 transition-opacity"
+                    className="w-full h-24 object-cover rounded-lg cursor-pointer hover:opacity-90 hover:scale-105 transition-all duration-300"
                   />
                 ))}
               </div>
 
               <div className="p-6">
                 {/* Tiêu đề và đánh giá */}
-                <div className="flex justify-between items-start mb-4">
+                <div className="flex flex-col md:flex-row justify-between items-start mb-6">
                   <div>
-                    <h1 className="text-2xl font-bold text-gray-800 mb-2">
+                    <h1 className="text-3xl font-serif font-bold text-gray-800 mb-3">
                       {room.name}
                     </h1>
-                    <div className="flex items-center space-x-4 text-sm text-gray-600">
-                      <div className="flex items-center space-x-1">
-                        <Users size={16} />
+                    <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
+                      <div className="flex items-center gap-2">
+                        <Users size={18} className="text-amber-500" />
                         <span>{room.capacity} khách</span>
                       </div>
-                      <div className="flex items-center space-x-1">
-                        <Bed size={16} />
+                      <div className="flex items-center gap-2">
+                        <Bed size={18} className="text-amber-500" />
                         <span>{room.bedType}</span>
                       </div>
-                      <div className="flex items-center space-x-1">
+                      <div className="flex items-center gap-2">
                         <span>📐 {room.size}</span>
                       </div>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <div className="flex items-center space-x-1 mb-1">
-                      <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                      <span className="font-semibold">{room.rating}</span>
+                  <div className="text-right mt-4 md:mt-0">
+                    <div className="flex items-center justify-end gap-2 mb-2">
+                      <Star className="w-6 h-6 fill-amber-400 text-amber-400" />
+                      <span className="font-semibold text-lg">
+                        {room.rating}
+                      </span>
                       <span className="text-gray-500">
                         ({room.reviews} đánh giá)
                       </span>
                     </div>
                     <div>
-                      <span className="text-3xl font-bold text-blue-600">
+                      <span className="text-3xl font-bold text-amber-500">
                         {room.price.toLocaleString("vi-VN")}₫
                       </span>
                       <span className="text-gray-500">/đêm</span>
@@ -117,8 +119,10 @@ const RoomDetails = () => {
                 </div>
 
                 {/* Mô tả */}
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold mb-2">Mô tả phòng</h3>
+                <div className="mb-8">
+                  <h3 className="text-xl font-semibold text-gray-800 mb-3">
+                    Mô tả phòng
+                  </h3>
                   <p className="text-gray-600 leading-relaxed">
                     {room.description}
                   </p>
@@ -126,17 +130,17 @@ const RoomDetails = () => {
 
                 {/* Tiện nghi */}
                 <div>
-                  <h3 className="text-lg font-semibold mb-4">
+                  <h3 className="text-xl font-semibold text-gray-800 mb-4">
                     Tiện nghi phòng
                   </h3>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                     {room.amenities.map((amenity, index) => (
                       <div
                         key={index}
-                        className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg"
+                        className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg hover:bg-amber-50 transition-colors duration-300"
                       >
-                        <div className="text-blue-600">{amenity.icon}</div>
-                        <span className="text-sm font-medium">
+                        <div className="text-amber-500">{amenity.icon}</div>
+                        <span className="text-sm font-medium text-gray-700">
                           {amenity.name}
                         </span>
                       </div>
@@ -149,7 +153,7 @@ const RoomDetails = () => {
 
           {/* Form đặt phòng */}
           <div className="lg:col-span-1">
-            <div className="sticky top-4">
+            <div className="sticky top-24">
               <BookingForm />
             </div>
           </div>
