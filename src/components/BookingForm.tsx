@@ -45,20 +45,21 @@ const BookingForm = () => {
   const finalPrice = totalPrice + tax;
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <Card>
+    <div className="w-full px-4 sm:px-6 lg:px-0">
+      <Card className="shadow-md">
         <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
+          <CardTitle className="flex items-center gap-2 text-lg font-semibold">
             <Calendar className="w-5 h-5 text-blue-600" />
             <span>Đặt phòng khách sạn</span>
           </CardTitle>
         </CardHeader>
+
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Thông tin đặt phòng */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Ngày nhận và trả */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="text-sm font-medium text-gray-700 mb-1 block">
                   Ngày nhận phòng
                 </label>
                 <Input
@@ -71,7 +72,7 @@ const BookingForm = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="text-sm font-medium text-gray-700 mb-1 block">
                   Ngày trả phòng
                 </label>
                 <Input
@@ -85,8 +86,9 @@ const BookingForm = () => {
               </div>
             </div>
 
+            {/* Số lượng khách */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="text-sm font-medium text-gray-700 block mb-2">
                 <Users className="inline w-4 h-4 mr-1" />
                 Số lượng khách
               </label>
@@ -97,7 +99,7 @@ const BookingForm = () => {
                 }
               >
                 <SelectTrigger>
-                  <SelectValue />
+                  <SelectValue placeholder="Chọn số lượng khách" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="1">1 khách</SelectItem>
@@ -112,13 +114,13 @@ const BookingForm = () => {
 
             {/* Thông tin khách hàng */}
             <div className="space-y-4">
-              <h3 className="font-semibold text-gray-800 flex items-center">
+              <h3 className="font-semibold text-gray-800 flex items-center text-base">
                 <User className="w-4 h-4 mr-2" />
                 Thông tin khách hàng
               </h3>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="text-sm font-medium text-gray-700 block mb-2">
                   Họ và tên
                 </label>
                 <Input
@@ -131,9 +133,9 @@ const BookingForm = () => {
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="text-sm font-medium text-gray-700 block mb-2">
                     Email
                   </label>
                   <Input
@@ -147,7 +149,7 @@ const BookingForm = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="text-sm font-medium text-gray-700 block mb-2">
                     Số điện thoại
                   </label>
                   <Input
@@ -163,11 +165,11 @@ const BookingForm = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Yêu cầu đặc biệt (tùy chọn)
+                <label className="text-sm font-medium text-gray-700 block mb-2">
+                  Yêu cầu đặc biệt (tuỳ chọn)
                 </label>
                 <textarea
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                   rows={3}
                   value={bookingData.specialRequests}
                   onChange={(e) =>
@@ -176,7 +178,7 @@ const BookingForm = () => {
                       specialRequests: e.target.value,
                     })
                   }
-                  placeholder="Ví dụ: Tầng cao, giường đôi, không hút thuốc..."
+                  placeholder="Ví dụ: Tầng cao, không hút thuốc..."
                 />
               </div>
             </div>
@@ -184,32 +186,30 @@ const BookingForm = () => {
             <Separator />
 
             {/* Tóm tắt giá */}
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <h3 className="font-semibold text-gray-800 mb-3">
+            <div className="bg-gray-50 p-4 rounded-md space-y-3">
+              <h3 className="font-semibold text-gray-800 mb-2 text-base">
                 Tóm tắt đặt phòng
               </h3>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span>Giá phòng ({nights} đêm)</span>
-                  <span>{totalPrice.toLocaleString("vi-VN")}₫</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Thuế và phí</span>
-                  <span>{tax.toLocaleString("vi-VN")}₫</span>
-                </div>
-                <Separator />
-                <div className="flex justify-between font-semibold text-lg">
-                  <span>Tổng cộng</span>
-                  <span className="text-blue-600">
-                    {finalPrice.toLocaleString("vi-VN")}₫
-                  </span>
-                </div>
+              <div className="flex justify-between text-sm">
+                <span>Giá phòng ({nights} đêm)</span>
+                <span>{totalPrice.toLocaleString("vi-VN")}₫</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span>Thuế và phí</span>
+                <span>{tax.toLocaleString("vi-VN")}₫</span>
+              </div>
+              <Separator />
+              <div className="flex justify-between font-semibold text-base">
+                <span>Tổng cộng</span>
+                <span className="text-blue-600">
+                  {finalPrice.toLocaleString("vi-VN")}₫
+                </span>
               </div>
             </div>
 
             <Button
               type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 py-3"
+              className="w-full bg-blue-600 hover:bg-blue-700 py-3 text-white"
               size="lg"
             >
               <CreditCard className="w-4 h-4 mr-2" />

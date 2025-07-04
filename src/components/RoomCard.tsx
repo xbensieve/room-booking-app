@@ -2,6 +2,7 @@ import React from "react";
 import { Star, Wifi, Coffee, Car, Users, Bed } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useNavigate } from "react-router-dom";
 
 interface RoomCardProps {
   id: number;
@@ -26,6 +27,8 @@ const RoomCard: React.FC<RoomCardProps> = ({
   capacity,
   bedType,
 }) => {
+  const navigate = useNavigate();
+
   const getFeatureIcon = (feature: string) => {
     const icons: { [key: string]: React.ReactNode } = {
       "WiFi miễn phí": <Wifi size={16} />,
@@ -36,55 +39,64 @@ const RoomCard: React.FC<RoomCardProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+    <div className="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden">
       <div className="relative">
-        <img src={image} alt={name} className="w-full h-48 object-cover" />
-        <div className="absolute top-4 right-4">
-          <Badge className="bg-blue-600 text-white">Phổ biến</Badge>
+        <img
+          src={image}
+          alt={name}
+          className="w-full h-48 sm:h-56 object-cover"
+        />
+        <div className="absolute top-3 right-3">
+          <Badge className="bg-amber-500 text-white text-xs">Phổ biến</Badge>
         </div>
       </div>
 
-      <div className="p-4">
-        <div className="flex justify-between items-start mb-2">
-          <h3 className="text-lg font-semibold text-gray-800">{name}</h3>
-          <div className="flex items-center space-x-1">
-            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-            <span className="text-sm font-medium">{rating}</span>
-            <span className="text-sm text-gray-500">({reviews})</span>
+      <div className="p-4 flex flex-col gap-3">
+        <div className="flex justify-between items-start">
+          <h3 className="text-base sm:text-lg font-semibold text-gray-800">
+            {name}
+          </h3>
+          <div className="flex items-center gap-1 text-sm text-yellow-500">
+            <Star className="w-4 h-4 fill-yellow-400" />
+            <span>{rating}</span>
+            <span className="text-gray-500">({reviews})</span>
           </div>
         </div>
 
-        <div className="flex items-center space-x-4 text-sm text-gray-600 mb-3">
-          <div className="flex items-center space-x-1">
+        <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
+          <div className="flex items-center gap-1">
             <Users size={16} />
             <span>{capacity} khách</span>
           </div>
-          <div className="flex items-center space-x-1">
+          <div className="flex items-center gap-1">
             <Bed size={16} />
             <span>{bedType}</span>
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-2 mb-4">
+        <div className="flex flex-wrap gap-2">
           {features.map((feature, index) => (
-            <div
+            <span
               key={index}
-              className="flex items-center space-x-1 text-sm text-gray-600 bg-gray-100 px-2 py-1 rounded"
+              className="flex items-center gap-1 text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded-full"
             >
               {getFeatureIcon(feature)}
-              <span>{feature}</span>
-            </div>
+              {feature}
+            </span>
           ))}
         </div>
 
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center pt-2">
           <div>
-            <span className="text-2xl font-bold text-blue-600">
+            <span className="text-xl font-bold text-blue-700">
               {price.toLocaleString("vi-VN")}₫
             </span>
-            <span className="text-sm text-gray-500">/đêm</span>
+            <span className="text-sm text-gray-500"> /đêm</span>
           </div>
-          <Button className="bg-blue-600 hover:bg-blue-700">
+          <Button
+            onClick={() => navigate(`/rooms/${id}`)}
+            className="bg-blue-600 hover:bg-blue-700 px-4 py-2 text-sm"
+          >
             Xem chi tiết
           </Button>
         </div>

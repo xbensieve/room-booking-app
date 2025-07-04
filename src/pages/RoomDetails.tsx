@@ -44,104 +44,87 @@ const RoomDetails: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <Header />
-
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Thông tin phòng */}
-          <div className="lg:col-span-2">
-            <div className="bg-white rounded-xl shadow-xl overflow-hidden animate-fade-in">
-              {/* Hình ảnh phòng */}
+    <div className="min-h-screen">
+      <div className="container mx-auto px-4 py-6 lg:py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-10">
+          <div className="lg:col-span-2 space-y-6">
+            <div className="bg-white rounded-xl shadow-md overflow-hidden">
               <div className="relative">
                 <img
                   src={room.images[0]}
                   alt={room.name}
-                  className="w-full h-72 md:h-96 object-cover"
+                  className="w-full h-[200px] md:h-[300px] lg:h-[400px] object-cover"
                 />
-                <div className="absolute top-4 right-4">
-                  <Badge className="bg-amber-500 text-gray-900 font-semibold px-3 py-1">
-                    Phổ biến nhất
-                  </Badge>
-                </div>
+                <Badge className="absolute top-4 right-4 bg-amber-500 text-gray-900 hover:text-white px-3 py-1 font-medium">
+                  Phổ biến nhất
+                </Badge>
               </div>
-
-              {/* Grid hình ảnh nhỏ */}
-              <div className="grid grid-cols-3 gap-3 p-6">
-                {room.images.slice(1).map((image, index) => (
+              <div className="grid grid-cols-3 gap-2 p-4">
+                {room.images.slice(1).map((img, i) => (
                   <img
-                    key={index}
-                    src={image}
-                    alt={`${room.name} ${index + 2}`}
-                    className="w-full h-24 object-cover rounded-lg cursor-pointer hover:opacity-90 hover:scale-105 transition-all duration-300"
+                    key={i}
+                    src={img}
+                    alt={`${room.name} ${i + 2}`}
+                    className="w-full h-20 md:h-24 object-cover rounded-md cursor-pointer hover:opacity-80 transition"
                   />
                 ))}
               </div>
 
-              <div className="p-6">
-                {/* Tiêu đề và đánh giá */}
-                <div className="flex flex-col md:flex-row justify-between items-start mb-6">
+              <div className="px-4 pb-6 space-y-6">
+                <div className="flex flex-col md:flex-row justify-between gap-4">
                   <div>
-                    <h1 className="text-3xl font-serif font-bold text-gray-800 mb-3">
+                    <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2 font-serif">
                       {room.name}
                     </h1>
-                    <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
-                      <div className="flex items-center gap-2">
-                        <Users size={18} className="text-amber-500" />
+                    <div className="flex flex-wrap gap-4 text-sm text-gray-600">
+                      <div className="flex items-center gap-1">
+                        <Users size={16} className="text-amber-500" />
                         <span>{room.capacity} khách</span>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Bed size={18} className="text-amber-500" />
+                      <div className="flex items-center gap-1">
+                        <Bed size={16} className="text-amber-500" />
                         <span>{room.bedType}</span>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <span>📐 {room.size}</span>
-                      </div>
+                      <div>📐 {room.size}</div>
                     </div>
                   </div>
-                  <div className="text-right mt-4 md:mt-0">
-                    <div className="flex items-center justify-end gap-2 mb-2">
-                      <Star className="w-6 h-6 fill-amber-400 text-amber-400" />
-                      <span className="font-semibold text-lg">
-                        {room.rating}
-                      </span>
-                      <span className="text-gray-500">
-                        ({room.reviews} đánh giá)
-                      </span>
+                  <div className="text-right">
+                    <div className="flex items-center justify-end gap-1 text-sm mb-1">
+                      <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+                      <span className="font-medium">{room.rating}</span>
+                      <span className="text-gray-500">({room.reviews})</span>
                     </div>
                     <div>
-                      <span className="text-3xl font-bold text-amber-500">
+                      <span className="text-xl font-bold text-amber-500">
                         {room.price.toLocaleString("vi-VN")}₫
                       </span>
-                      <span className="text-gray-500">/đêm</span>
+                      <span className="text-sm text-gray-500"> /đêm</span>
                     </div>
                   </div>
                 </div>
 
-                {/* Mô tả */}
-                <div className="mb-8">
-                  <h3 className="text-xl font-semibold text-gray-800 mb-3">
+                <div>
+                  <h3 className="text-lg font-semibold mb-2 text-gray-800">
                     Mô tả phòng
                   </h3>
-                  <p className="text-gray-600 leading-relaxed">
+                  <p className="text-gray-600 text-sm leading-relaxed">
                     {room.description}
                   </p>
                 </div>
 
-                {/* Tiện nghi */}
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-800 mb-4">
+                  <h3 className="text-lg font-semibold mb-2 text-gray-800">
                     Tiện nghi phòng
                   </h3>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    {room.amenities.map((amenity, index) => (
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    {room.amenities.map((item, idx) => (
                       <div
-                        key={index}
-                        className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg hover:bg-amber-50 transition-colors duration-300"
+                        key={idx}
+                        className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg"
                       >
-                        <div className="text-amber-500">{amenity.icon}</div>
-                        <span className="text-sm font-medium text-gray-700">
-                          {amenity.name}
+                        <span className="text-amber-500">{item.icon}</span>
+                        <span className="text-sm text-gray-700">
+                          {item.name}
                         </span>
                       </div>
                     ))}
@@ -151,7 +134,7 @@ const RoomDetails: React.FC = () => {
             </div>
           </div>
 
-          {/* Form đặt phòng */}
+          {/* Booking form */}
           <div className="lg:col-span-1">
             <div className="sticky top-24">
               <BookingForm />
