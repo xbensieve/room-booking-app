@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Layout from "./components/layout/Layout";
 import ScrollToTop from "./components/ScrollToTop";
+import ResetPassword from "./pages/ResetPassword";
 
 const App = () => (
   <BrowserRouter>
@@ -17,6 +18,7 @@ const App = () => (
         <Route path="/rooms/:id" element={<RoomDetails />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
