@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { AlertCircle } from "lucide-react";
+import { registerWithEmail } from "@/api/authApi";
 
 const Register: React.FC = () => {
   const [formData, setFormData] = useState<AuthFormData>({
@@ -23,13 +24,9 @@ const Register: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
     try {
-      await createUserWithEmailAndPassword(
-        auth,
-        formData.email,
-        formData.password
-      );
-      navigate("/");
+      await registerWithEmail(formData.email, formData.password);
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);

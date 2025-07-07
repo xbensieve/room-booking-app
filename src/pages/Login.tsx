@@ -1,22 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
-import { auth, googleProvider } from "../services/firebase";
+import {
+  loginWithEmail,
+  loginWithGoogle,
+  logout,
+  onAuthStateChanged,
+} from "../api/authApi";
 import { AuthFormData } from "../types/auth";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { AlertCircle } from "lucide-react";
-
+import { auth } from "../services/firebase";
 const Login: React.FC = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [formData, setFormData] = useState<AuthFormData>({
     email: "",
     password: "",
   });
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
-
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setIsLoggedIn(!!user);
+    });
+    return () => unsubscribe();
+  }, []);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -24,7 +34,7 @@ const Login: React.FC = () => {
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await signInWithEmailAndPassword(auth, formData.email, formData.password);
+      await loginWithEmail(formData.email, formData.password);
       navigate("/");
     } catch (err: unknown) {
       if (err instanceof Error) {
@@ -37,13 +47,26 @@ const Login: React.FC = () => {
 
   const handleGoogleLogin = async () => {
     try {
-      await signInWithPopup(auth, googleProvider);
+      await loginWithGoogle();
       navigate("/");
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
       } else {
         setError("Đã xảy ra lỗi không xác định.");
+      }
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate("/login");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Đăng xuất thất bại.");
       }
     }
   };
@@ -103,7 +126,14 @@ const Login: React.FC = () => {
                 required
               />
             </div>
-
+            <div className="flex justify-between items-center">
+              <Link
+                to="/reset-password"
+                className="text-sm text-amber-500 hover:text-amber-400 hover:underline"
+              >
+                Quên mật khẩu?
+              </Link>
+            </div>
             <Button
               type="submit"
               className="w-full bg-amber-500 text-gray-900 font-semibold py-3 rounded-lg hover:bg-amber-400 transition"
@@ -124,6 +154,16 @@ const Login: React.FC = () => {
             </svg>
             Đăng nhập bằng Google
           </Button>
+
+          {isLoggedIn && (
+            <Button
+              type="button"
+              onClick={handleLogout}
+              className="w-full bg-red-500 text-white font-semibold py-3 rounded-lg hover:bg-red-600 transition"
+            >
+              Đăng xuất
+            </Button>
+          )}
 
           <p className="text-center text-sm text-gray-600 mt-2">
             Chưa có tài khoản?{" "}
