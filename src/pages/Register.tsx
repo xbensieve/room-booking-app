@@ -1,21 +1,23 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../services/firebase";
+import { registerWithEmail } from "@/api/authApi";
 import { AuthFormData } from "../types/auth";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { AlertCircle } from "lucide-react";
-import { registerWithEmail } from "@/api/authApi";
+import { AlertCircle, Eye, EyeOff } from "lucide-react";
 
 const Register: React.FC = () => {
   const [formData, setFormData] = useState<AuthFormData>({
     email: "",
     password: "",
   });
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,8 +27,18 @@ const Register: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+
+    if (formData.password !== confirmPassword) {
+      setError("Mật khẩu và xác nhận mật khẩu không khớp.");
+      return;
+    }
+
     try {
-      await registerWithEmail(formData.email, formData.password);
+      const result = await registerWithEmail(formData.email, formData.password);
+      if (result) {
+        setFormData({ email: "", password: "" });
+        setConfirmPassword("");
+      }
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
@@ -57,6 +69,7 @@ const Register: React.FC = () => {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Email */}
             <div>
               <label
                 htmlFor="email"
@@ -74,6 +87,8 @@ const Register: React.FC = () => {
                 required
               />
             </div>
+
+            {/* Mật khẩu */}
             <div>
               <label
                 htmlFor="password"
@@ -81,17 +96,59 @@ const Register: React.FC = () => {
               >
                 Mật khẩu
               </label>
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="Nhập mật khẩu"
-                required
-              />
+              <div className="relative">
+                <Input
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="Nhập mật khẩu"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
             </div>
 
+            {/* Xác nhận mật khẩu */}
+            <div>
+              <label
+                htmlFor="confirmPassword"
+                className="block text-sm text-gray-700 mb-1"
+              >
+                Xác nhận mật khẩu
+              </label>
+              <div className="relative">
+                <Input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type={showConfirmPassword ? "text" : "password"}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="Nhập lại mật khẩu"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                >
+                  {showConfirmPassword ? (
+                    <EyeOff size={18} />
+                  ) : (
+                    <Eye size={18} />
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {/* Submit */}
             <Button
               type="submit"
               className="w-full bg-amber-500 text-gray-900 font-semibold py-3 rounded-lg hover:bg-amber-400 transition"

@@ -1,12 +1,7 @@
-import React from "react";
-import { Star } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
-import Header from "@/components/layout/Header";
+import React, { useRef } from "react";
 import HeroSection from "@/components/HeroSection";
 import SearchBar from "@/components/SearchBar";
 import WhyUsSection from "@/components/WhyUsSection";
-import Footer from "@/components/layout/Footer";
 import RoomCard from "@/components/RoomCard";
 const Index: React.FC = () => {
   const featuredRooms = [

@@ -30,7 +30,7 @@ const features: FeatureItem[] = [
 
 const WhyUsSection: React.FC = () => {
   return (
-    <section className="py-16 bg-white">
+    <section className="py-16">
       <div className="container mx-auto px-4">
         <div className="text-center mb-10">
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 font-roboto mb-3">

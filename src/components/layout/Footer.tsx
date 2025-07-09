@@ -2,8 +2,9 @@ import React from "react";
 import { MapPin, Phone, Mail, ArrowRight } from "lucide-react";
 
 const Footer: React.FC = () => {
+  const currentYear = new Date().getFullYear();
   return (
-    <footer className="bg-[#f2f6fa] text-black pt-12 pb-6">
+    <footer className="text-black pt-12 pb-6 border-t border-[#feba02]">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-10">
           <div>
@@ -17,40 +18,29 @@ const Footer: React.FC = () => {
           </div>
 
           <div>
-            <h4 className="text-lg font-semibold mb-4">Liên kết nhanh</h4>
-            <ul className="space-y-2 text-sm text-gray-700">
-              <li>
-                <a
-                  href="#"
-                  className="hover:text-amber-500 flex items-center gap-1 transition-colors"
-                >
-                  <ArrowRight size={14} /> Trang chủ
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#rooms"
-                  className="hover:text-amber-500 flex items-center gap-1 transition-colors"
-                >
-                  <ArrowRight size={14} /> Phòng
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#services"
-                  className="hover:text-amber-500 flex items-center gap-1 transition-colors"
-                >
-                  <ArrowRight size={14} /> Dịch vụ
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#contact"
-                  className="hover:text-amber-500 flex items-center gap-1 transition-colors"
-                >
-                  <ArrowRight size={14} /> Liên hệ
-                </a>
-              </li>
+            <h4 className="text-lg font-semibold text-gray-900 mb-4">
+              Liên kết nhanh
+            </h4>
+            <ul className="space-y-2 text-sm">
+              {[
+                { label: "Trang chủ", href: "#" },
+                { label: "Phòng", href: "#rooms" },
+                { label: "Dịch vụ", href: "#services" },
+                { label: "Liên hệ", href: "#contact" },
+              ].map(({ label, href }) => (
+                <li key={label}>
+                  <a
+                    href={href}
+                    className="group flex items-center gap-2 hover:text-amber-600 transition"
+                  >
+                    <ArrowRight
+                      size={14}
+                      className="text-amber-500 group-hover:translate-x-1 transition-transform duration-200"
+                    />
+                    <span>{label}</span>
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -81,7 +71,7 @@ const Footer: React.FC = () => {
         </div>
 
         <div className="border-t border-gray-300 pt-6 text-center text-sm text-gray-600">
-          © {new Date().getFullYear()} HotelLuxury. Tất cả quyền được bảo lưu.
+          © {currentYear} HotelLuxury. Tất cả quyền được bảo lưu.
         </div>
       </div>
     </footer>
