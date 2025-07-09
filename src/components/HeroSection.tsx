@@ -22,11 +22,14 @@ const HeroSection: React.FC = () => {
     };
 
     const animationId = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(animationId); // Cleanup
+    return () => cancelAnimationFrame(animationId);
   }, []);
   return (
-    <section className="relative bg-gradient-to-r from-indigo-900 via-blue-800 to-indigo-900 text-white py-16 sm:py-20 md:py-28 overflow-hidden">
-      <div className="absolute inset-0 bg-black opacity-40"></div>
+    <section
+      className="relative bg-cover bg-center bg-no-repeat text-white py-16 sm:py-20 md:py-28 overflow-hidden"
+      style={{ backgroundImage: "url('/bg.jpg')" }}
+    >
+      <div className="absolute inset-0 bg-black/60"></div>
       <div className="relative container mx-auto px-4 text-center">
         <h1 className="text-3xl sm:text-4xl md:text-6xl font-inter font-bold leading-tight mb-4">
           Đặt Phòng Khách Sạn Cao Cấp
@@ -41,12 +44,12 @@ const HeroSection: React.FC = () => {
 
         <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mb-8">
           <a href="/register">
-            <Button className="bg-amber-500 text-gray-900 hover:bg-amber-400 px-6 py-3 rounded-full font-semibold transition-all duration-300">
+            <Button className="bg-amber-500 text-gray-900 hover:bg-amber-400 px-6 py-3 rounded-lg font-bold transition-all duration-300">
               Đặt phòng ngay
             </Button>
           </a>
           <a href="/contact">
-            <Button className="bg-transparent border-2 border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-gray-900 px-6 py-3 rounded-full font-semibold transition-all duration-300">
+            <Button className="bg-transparent border-2 border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-gray-900 px-6 py-3 rounded-lg font-semibold transition-all duration-300">
               Liên hệ hỗ trợ
             </Button>
           </a>

@@ -8,7 +8,7 @@ import {
   sendPasswordResetEmail,
 } from "firebase/auth";
 import { auth, googleProvider } from "../services/firebase";
-
+import { toast } from "sonner";
 async function loginWithEmail(email, password) {
   try {
     const userCredential = await signInWithEmailAndPassword(
@@ -18,7 +18,6 @@ async function loginWithEmail(email, password) {
     );
     const user = userCredential.user;
     const idToken = await user.getIdToken();
-
     const response = await axiosClient.post(
       "/api/auth/login",
       {
@@ -29,9 +28,10 @@ async function loginWithEmail(email, password) {
       }
     );
 
-    console.log("Login successful:", response);
+    return response;
   } catch (error) {
     console.error("Login failed:", error);
+    throw error;
   }
 }
 
@@ -50,24 +50,34 @@ async function loginWithGoogle() {
         withCredentials: true,
       }
     );
-    console.log("Login successful");
+    return response;
   } catch (error) {
     console.error("Google login failed:", error);
     throw error;
   }
 }
 
-async function registerWithEmail(email: string, password: string) {
-  const userCredential = await createUserWithEmailAndPassword(
-    auth,
-    email,
-    password
-  );
-  const user = userCredential.user;
+async function registerWithEmail(
+  email: string,
+  password: string
+): Promise<boolean> {
+  try {
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    const user = userCredential.user;
 
-  if (!user.emailVerified) {
-    await sendEmailVerification(user);
-    alert("Please verify your email address. We've sent a verification email.");
+    if (!user.emailVerified) {
+      await sendEmailVerification(user);
+      toast.success("Vui lòng kiểm tra email để xác minh tài khoản.");
+    }
+
+    return true;
+  } catch (error: any) {
+    toast.error(error.message || "Đăng ký thất bại.");
+    throw error;
   }
 }
 
