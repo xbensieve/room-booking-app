@@ -11,6 +11,11 @@ import RouteChangeLoader from "./components/RouteChangeLoader";
 import { AuthProvider } from "@/context/AuthContext";
 import { Toaster } from "sonner";
 import GoogleOneTap from "./components/GoogleOneTapLogin";
+import { AdminLayout } from "./components/layout/AdminLayout";
+import { DashboardPage } from "./pages/admin/DashboardPage";
+import { HotelsPage } from "./pages/admin/HotelsPage";
+import { RoomsPage } from "./pages/admin/RoomsPage";
+
 const App = () => (
   <>
     <GoogleOneTap />
@@ -28,6 +33,19 @@ const App = () => (
             <Route path="/register" element={<Register />} />
             <Route path="/forgot-password" element={<ResetPassword />} />
             <Route path="*" element={<NotFound />} />
+          </Route>
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<DashboardPage />} />
+            <Route path="hotels" element={<HotelsPage />} />
+            <Route path="rooms" element={<RoomsPage />} />
+            <Route
+              path="settings"
+              element={
+                <div className="p-8 text-center text-gray-500">
+                  Trang cài đặt đang được phát triển
+                </div>
+              }
+            />
           </Route>
         </Routes>
       </BrowserRouter>
