@@ -1,4 +1,3 @@
-// components/RouteChangeLoader.tsx
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import LoadingPage from "@/pages/Loading";
@@ -12,7 +11,7 @@ const RouteChangeLoader = () => {
 
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 600);
+    }, 150);
 
     return () => clearTimeout(timer);
   }, [location]);

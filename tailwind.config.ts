@@ -10,6 +10,7 @@ export default {
   ],
   prefix: "",
   theme: {
+    darkMode: "class",
     container: {
       center: true,
       padding: "2rem",
