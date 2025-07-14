@@ -15,15 +15,14 @@ import { AdminLayout } from "./components/layout/AdminLayout";
 import { DashboardPage } from "./pages/admin/DashboardPage";
 import { HotelsPage } from "./pages/admin/HotelsPage";
 import { RoomsPage } from "./pages/admin/RoomsPage";
-
+import RequireAdmin from "./pages/admin/RequireAdmin";
 const App = () => (
   <>
     <GoogleOneTap />
     <AuthProvider>
       <BrowserRouter>
-        <Toaster position="top-center" />
+        <Toaster position="bottom-right" />
         <ScrollToTop />
-        <RouteChangeLoader />
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Index />} />
@@ -34,18 +33,20 @@ const App = () => (
             <Route path="/forgot-password" element={<ResetPassword />} />
             <Route path="*" element={<NotFound />} />
           </Route>
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<DashboardPage />} />
-            <Route path="hotels" element={<HotelsPage />} />
-            <Route path="rooms" element={<RoomsPage />} />
-            <Route
-              path="settings"
-              element={
-                <div className="p-8 text-center text-gray-500">
-                  Trang cài đặt đang được phát triển
-                </div>
-              }
-            />
+          <Route path="/admin" element={<RequireAdmin />}>
+            <Route element={<AdminLayout />}>
+              <Route index element={<DashboardPage />} />
+              <Route path="hotels" element={<HotelsPage />} />
+              <Route path="rooms" element={<RoomsPage />} />
+              <Route
+                path="settings"
+                element={
+                  <div className="p-8 text-center text-gray-500">
+                    Trang cài đặt đang được phát triển
+                  </div>
+                }
+              />
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>

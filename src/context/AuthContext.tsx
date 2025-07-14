@@ -1,4 +1,11 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useMemo,
+  useCallback,
+} from "react";
 import { User, onAuthStateChanged, getIdToken } from "firebase/auth";
 import { auth } from "@/services/firebase";
 import axiosClient from "@/api/axiosClient";
@@ -8,12 +15,14 @@ interface AuthContextType {
   currentUser: User | null;
   loading: boolean;
   logout: () => Promise<void>;
+  role: string | null;
 }
 
 const AuthContext = createContext<AuthContextType>({
   currentUser: null,
   loading: true,
   logout: async () => {},
+  role: null,
 });
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -21,21 +30,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-
+  const [role, setRole] = useState<string | null>(null);
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      setCurrentUser(user);
+
       if (user) {
         try {
-          // Refresh ID token and send to backend
           const idToken = await getIdToken(user, true);
-          await axiosClient.post(
+          const res = await axiosClient.post(
             "/api/auth/login",
             { idToken },
             { withCredentials: true }
           );
-          setCurrentUser(user);
+          const backendClaims = res.data.claims;
+          setRole(backendClaims?.role || null);
         } catch (err) {
           console.error("Failed to sync login with backend:", err);
+        } finally {
+          setLoading(false);
         }
       } else {
         try {
@@ -43,29 +56,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
           console.log("Logged out and backend session cleared");
         } catch (err) {
           console.error("Backend logout error:", err);
+        } finally {
+          setRole(null);
+          setLoading(false);
         }
-        setCurrentUser(null);
       }
-
-      setLoading(false);
     });
 
     return () => unsubscribe();
   }, []);
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     try {
-      await logoutApi(); // logout() từ authApi
+      await logoutApi();
       setCurrentUser(null);
     } catch (err) {
       console.error("Logout failed:", err);
     }
-  };
+  }, []);
+
+  const contextValue = useMemo(
+    () => ({ currentUser, loading, logout, role }),
+    [currentUser, loading, logout, role]
+  );
 
   return (
-    <AuthContext.Provider value={{ currentUser, loading, logout }}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
 };
 

@@ -1,36 +1,15 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Star, CheckCircle, Mail } from "lucide-react";
-
+import CountUp from "react-countup";
 const HeroSection: React.FC = () => {
-  const [count, setCount] = useState(0);
-  const hasAnimated = useRef(false);
-
-  useEffect(() => {
-    if (hasAnimated.current) return;
-    hasAnimated.current = true;
-
-    const end = 10000;
-    const duration = 2500;
-    const startTime = performance.now();
-
-    const step = (now: number) => {
-      const progress = Math.min((now - startTime) / duration, 1);
-      const value = Math.floor(progress * end);
-      setCount(value);
-      if (progress < 1) requestAnimationFrame(step);
-    };
-
-    const animationId = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(animationId);
-  }, []);
   return (
     <section
-      className="relative bg-cover bg-center bg-no-repeat text-white py-16 sm:py-20 md:py-28 overflow-hidden"
+      className="relative bg-cover bg-center bg-no-repeat text-white py-16 sm:py-20 md:py-28 overflow-hidden -mt-16"
       style={{ backgroundImage: "url('/bg.jpg')" }}
     >
       <div className="absolute inset-0 bg-black/60"></div>
-      <div className="relative container mx-auto px-4 text-center">
+      <div className="relative container mx-auto px-4 text-center mt-6">
         <h1 className="text-3xl sm:text-4xl md:text-6xl font-inter font-bold leading-tight mb-4">
           Đặt Phòng Khách Sạn Cao Cấp
           <span className="block text-amber-400 mt-1">
@@ -93,9 +72,9 @@ const HeroSection: React.FC = () => {
           <span className="hidden sm:inline-block w-px h-4 bg-white opacity-30"></span>
           <span>
             Đã phục vụ hơn{" "}
-            <span className="text-amber-400 font-bold text-base sm:text-lg drop-shadow-glow">
-              {count.toLocaleString("vi-VN")}+
-            </span>{" "}
+            <span className="text-amber-400 font-bold text-base sm:text-lg drop-shadow-glow gap-1">
+              <CountUp end={10000} duration={2.5} separator="." />+
+            </span>
             lượt đặt phòng thành công
           </span>
         </div>

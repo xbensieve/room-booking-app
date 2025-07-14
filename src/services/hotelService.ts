@@ -27,7 +27,9 @@ export const hotelService = {
       searchParams.append("search", search);
     }
 
-    const response = await fetch(`${API_BASE_URL}/hotels?${searchParams}`);
+    const response = await fetch(`${API_BASE_URL}/hotels?${searchParams}`, {
+      credentials: "include",
+    });
 
     if (!response.ok) {
       throw new Error("Failed to fetch hotels");
