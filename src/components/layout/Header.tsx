@@ -11,34 +11,34 @@ import { Button } from "@/components/ui/button";
 import Logo from "@/../public/logo.png";
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
 import { useAuth } from "@/context/AuthContext";
-
+import { useLocation } from "react-router-dom";
+import { HeaderSkeleton } from "@/components/HeaderSkeleton";
 interface NavItem {
   href: string;
   label: string;
 }
-
 const navItems: NavItem[] = [
   { href: "/", label: "Trang chủ" },
   { href: "#rooms", label: "Phòng" },
   { href: "#services", label: "Dịch vụ" },
   { href: "#contact", label: "Liên hệ" },
 ];
-
 const Header: React.FC = () => {
-  const { currentUser, logout } = useAuth();
+  const { currentUser, loading, logout } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrollDirection, setScrollDirection] = useState<"up" | "down">("up");
   const lastScrollY = useRef(0);
   const controls = useAnimation();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const menuRef = useRef<HTMLDivElement | null>(null);
+  const location = useLocation();
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
   const toggleDropdown = () => setIsDropdownOpen((prev) => !prev);
-
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      if (currentScrollY > lastScrollY.current + 10) {
+      if (currentScrollY > lastScrollY.current + 10 && currentScrollY > 50) {
         setScrollDirection("down");
       } else if (currentScrollY < lastScrollY.current - 10) {
         setScrollDirection("up");
@@ -50,70 +50,80 @@ const Header: React.FC = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
       if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
+        menuRef.current &&
+        !menuRef.current.contains(event.target as Node) &&
+        !dropdownRef.current?.contains(event.target as Node)
       ) {
+        setIsMenuOpen(false);
         setIsDropdownOpen(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
     };
   }, []);
-
   useEffect(() => {
-    controls.start(scrollDirection === "down" ? "collapsed" : "expanded");
-  }, [scrollDirection]);
+    controls.start(scrollDirection === "down" ? "hidden" : "visible");
+  }, [scrollDirection, controls]);
+  useEffect(() => {
+    setIsMenuOpen(false);
+    setIsDropdownOpen(false);
+  }, [location.pathname]);
 
   const headerVariants = {
-    expanded: {
-      paddingTop: "16px",
-      paddingBottom: "16px",
-      transition: { duration: 0.3 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 120,
+        damping: 20,
+        mass: 0.5,
+      },
     },
-    collapsed: {
-      paddingTop: "6px",
-      paddingBottom: "6px",
-      transition: { duration: 0.3 },
+    hidden: {
+      y: -100,
+      opacity: 0,
+      transition: {
+        type: "spring",
+        stiffness: 120,
+        damping: 20,
+        mass: 0.5,
+      },
     },
   };
 
+  if (loading) {
+    return <HeaderSkeleton />;
+  }
+
   return (
     <motion.header
-      className="sticky top-0 z-50 bg-[#003580] text-white w-full shadow-md"
-      initial="expanded"
+      className="fixed top-0 z-50 bg-[#003580] text-white w-full shadow-md"
+      initial="visible"
       animate={controls}
       variants={headerVariants}
     >
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 py-3">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-2 group">
             <div className="bg-[#feba02] p-2 rounded-full shadow-md group-hover:animate-pulse transition-all">
               <img
                 src={Logo}
                 alt="Logo"
-                className={`object-contain transition-all duration-300 ${
-                  scrollDirection === "down" ? "w-6 h-6" : "w-8 h-8"
-                }`}
+                className="object-contain w-8 h-8 transition-all duration-300"
               />
             </div>
             <div className="text-center">
-              <h1
-                className={`font-roboto font-extrabold text-transparent bg-clip-text bg-white transition-all ${
-                  scrollDirection === "down" ? "text-base" : "text-lg"
-                }`}
-              >
+              <h1 className="font-roboto font-extrabold text-transparent bg-clip-text bg-white text-lg">
                 Happy Travel
               </h1>
-              <p
-                className={`text-[#7c90a6] font-medium transition-all ${
-                  scrollDirection === "down" ? "text-[10px]" : "text-xs"
-                }`}
-              >
+              <p className="text-[#7c90a6] font-medium text-xs">
                 Premium Hotel Booking
               </p>
             </div>
@@ -133,9 +143,7 @@ const Header: React.FC = () => {
               <a
                 key={item.label}
                 href={item.href}
-                className={`font-roboto font-medium hover:brightness-125 transition-all group ${
-                  scrollDirection === "down" ? "text-sm" : "text-base"
-                } text-[#f2f6fa]`}
+                className="font-roboto font-medium hover:brightness-125 transition-all group text-base text-[#f2f6fa]"
               >
                 {item.label}
                 <span className="block h-0.5 w-0 bg-[#feba02] group-hover:w-full transition-all duration-300"></span>
@@ -143,27 +151,22 @@ const Header: React.FC = () => {
             ))}
 
             {!currentUser ? (
-              <>
+              <div className="flex items-center gap-4">
                 <a
                   href="/login"
-                  className={`font-roboto font-medium hover:brightness-125 transition-all group ${
-                    scrollDirection === "down" ? "text-sm" : "text-base"
-                  } text-[#f2f6fa]`}
+                  className="font-roboto font-medium hover:brightness-125 transition-all group text-base text-[#f2f6fa]"
                 >
                   Đăng nhập
                   <span className="block h-0.5 w-0 bg-[#feba02] group-hover:w-full transition-all duration-300"></span>
                 </a>
-
                 <a
                   href="/register"
-                  className={`font-roboto font-medium hover:brightness-125 transition-all group ${
-                    scrollDirection === "down" ? "text-sm" : "text-base"
-                  } text-[#feba02]`}
+                  className="font-roboto font-medium hover:brightness-125 transition-all group text-base text-[#feba02]"
                 >
                   Đăng ký
                   <span className="block h-0.5 w-0 bg-[#feba02] group-hover:w-full transition-all duration-300"></span>
                 </a>
-              </>
+              </div>
             ) : (
               <div ref={dropdownRef} className="relative ml-4">
                 <button
@@ -226,6 +229,7 @@ const Header: React.FC = () => {
       <AnimatePresence>
         {isMenuOpen && (
           <motion.nav
+            ref={menuRef}
             key="mobile-menu"
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
@@ -263,10 +267,9 @@ const Header: React.FC = () => {
                   >
                     <div className="flex flex-col">
                       <span>Đăng nhập</span>
-                      <span className="block h-0.5 w-0  group-hover:w-full transition-all duration-300"></span>
+                      <span className="block h-0.5 w-0 group-hover:w-full transition-all duration-300"></span>
                     </div>
                   </a>
-
                   <a
                     href="/register"
                     onClick={toggleMenu}
@@ -295,7 +298,6 @@ const Header: React.FC = () => {
                       {currentUser.displayName || currentUser.email}
                     </span>
                   </div>
-
                   <a
                     href="/bookings"
                     onClick={toggleMenu}
@@ -307,7 +309,6 @@ const Header: React.FC = () => {
                       <span className="block h-0.5 w-0 group-hover:w-full transition-all duration-300"></span>
                     </span>
                   </a>
-
                   <a
                     href="/reviews"
                     onClick={toggleMenu}
@@ -319,7 +320,6 @@ const Header: React.FC = () => {
                       <span className="block h-0.5 w-0 group-hover:w-full transition-all duration-300"></span>
                     </span>
                   </a>
-
                   <a
                     href="/profile"
                     onClick={toggleMenu}
@@ -331,7 +331,6 @@ const Header: React.FC = () => {
                       <span className="block h-0.5 w-0 group-hover:w-full transition-all duration-300"></span>
                     </span>
                   </a>
-
                   <button
                     onClick={() => {
                       logout();
@@ -352,4 +351,4 @@ const Header: React.FC = () => {
   );
 };
 
-export default Header;
+export default React.memo(Header);

@@ -24,7 +24,7 @@ const Layout = () => {
   return (
     <div className="flex flex-col min-h-screen relative">
       <Header />
-      <main className="flex-grow bg-[#f4f7fb]">
+      <main className="flex-grow bg-[#f4f7fb] ">
         <Outlet />
       </main>
       <Footer />
