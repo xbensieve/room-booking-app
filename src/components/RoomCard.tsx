@@ -1,8 +1,7 @@
 import React from "react";
 import { Star, Wifi, Coffee, Car, Users, Bed } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 interface RoomCardProps {
   id: number;
@@ -15,6 +14,12 @@ interface RoomCardProps {
   capacity: number;
   bedType: string;
 }
+
+const featureIcons: { [key: string]: JSX.Element } = {
+  "WiFi miễn phí": <Wifi className="w-4 h-4" />,
+  "Bữa sáng": <Coffee className="w-4 h-4" />,
+  "Đỗ xe miễn phí": <Car className="w-4 h-4" />,
+};
 
 const RoomCard: React.FC<RoomCardProps> = ({
   id,
@@ -29,73 +34,63 @@ const RoomCard: React.FC<RoomCardProps> = ({
 }) => {
   const navigate = useNavigate();
 
-  const getFeatureIcon = (feature: string) => {
-    const icons: { [key: string]: React.ReactNode } = {
-      "WiFi miễn phí": <Wifi size={16} />,
-      "Bữa sáng": <Coffee size={16} />,
-      "Đỗ xe miễn phí": <Car size={16} />,
-    };
-    return icons[feature] || null;
-  };
-
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden">
-      <div className="relative">
+    <div className="group border rounded-md overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 bg-white">
+      <div className="relative w-full h-48 sm:h-60 overflow-hidden">
         <img
           src={image}
           alt={name}
-          className="w-full h-48 sm:h-56 object-cover"
+          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
-        <div className="absolute top-3 right-3">
-          <Badge className="bg-amber-500 text-white text-xs">Phổ biến</Badge>
+        <div className="absolute top-3 right-3 bg-blue-600 text-white text-xs px-2 py-1 rounded shadow-sm">
+          Nổi bật
         </div>
       </div>
 
-      <div className="p-4 flex flex-col gap-3">
+      <div className="p-4 space-y-3">
         <div className="flex justify-between items-start">
-          <h3 className="text-base sm:text-lg font-semibold text-gray-800">
+          <div className="text-base font-semibold text-gray-900 leading-tight">
             {name}
-          </h3>
-          <div className="flex items-center gap-1 text-sm text-yellow-500">
+          </div>
+          <div className="flex items-center gap-1 text-yellow-500 text-sm">
             <Star className="w-4 h-4 fill-yellow-400" />
             <span>{rating}</span>
-            <span className="text-gray-500">({reviews})</span>
+            <span className="text-gray-400">({reviews})</span>
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
+        <div className="flex items-center text-sm text-gray-600 gap-4">
           <div className="flex items-center gap-1">
-            <Users size={16} />
+            <Users className="w-4 h-4" />
             <span>{capacity} khách</span>
           </div>
           <div className="flex items-center gap-1">
-            <Bed size={16} />
+            <Bed className="w-4 h-4" />
             <span>{bedType}</span>
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-2">
-          {features.map((feature, index) => (
-            <span
-              key={index}
-              className="flex items-center gap-1 text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded-full"
+        <div className="flex flex-wrap gap-2 mt-1">
+          {features.map((f, i) => (
+            <div
+              key={i}
+              className="flex items-center gap-1 bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs"
             >
-              {getFeatureIcon(feature)}
-              {feature}
-            </span>
+              {featureIcons[f]} <span>{f}</span>
+            </div>
           ))}
         </div>
 
         <div className="flex justify-between items-center pt-2">
           <div>
-            <span className="text-xl font-bold text-blue-700">
+            <span className="text-lg font-bold text-blue-700">
               {price.toLocaleString("vi-VN")}₫
             </span>
             <span className="text-sm text-gray-500"> /đêm</span>
           </div>
           <Button
             onClick={() => navigate(`/rooms/${id}`)}
-            className="bg-blue-600 hover:bg-blue-700 px-4 py-2 text-sm"
+            className="h-9 px-4 bg-gray-900 hover:bg-gray-800 text-white text-sm font-medium rounded"
           >
             Xem chi tiết
           </Button>
