@@ -1,26 +1,51 @@
-import React from "react";
-import ContentLoader from "react-content-loader";
+import { Skeleton } from "@/components/ui/skeleton";
+import { motion } from "framer-motion";
 
-export const HeaderSkeleton = () => (
-  <header className="fixed top-0 z-50 w-full bg-[#003580] shadow-md h-16">
-    <div className="container mx-auto px-4 h-full flex items-center justify-between">
-      <ContentLoader
-        speed={2}
-        width="100%"
-        height={64}
-        backgroundColor="#4f6789"
-        foregroundColor="#6e85a8"
-        className="w-full"
-      >
-        {/* Logo circle */}
-        <circle cx="32" cy="32" r="20" />
-        {/* Brand text */}
-        <rect x="64" y="20" rx="4" ry="4" width="120" height="12" />
-        <rect x="64" y="40" rx="3" ry="3" width="80" height="8" />
-        {/* Avatar + Button */}
-        <rect x="85%" y="20" rx="6" ry="6" width="80" height="24" />
-        <circle cx="95%" cy="32" r="14" />
-      </ContentLoader>
-    </div>
-  </header>
-);
+export const HeaderSkeleton = () => {
+  return (
+    <>
+      <header className="fixed top-0 z-50 w-full bg-[#003580] shadow-md h-16 sm:hidden">
+        <div className="container mx-auto px-4 h-full flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Skeleton className="h-10 w-10 rounded-full bg-[#6e85a8]" />
+            <div className="flex flex-col gap-1">
+              <Skeleton className="h-4 w-24 bg-[#6e85a8]" />
+              <Skeleton className="h-3 w-16 bg-[#6e85a8]" />
+            </div>
+          </div>
+          <Skeleton className="h-6 w-6 bg-[#6e85a8]" />
+        </div>
+      </header>
+      <header className="hidden sm:flex fixed top-0 z-50 w-full bg-[#003580] shadow-md h-20">
+        <div className="container mx-auto px-4 h-full flex items-center justify-between">
+          {/* Left: Logo + Titles */}
+          <div className="flex items-center gap-3">
+            <motion.div
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Skeleton className="h-12 w-12 rounded-full bg-[#6e85a8]" />
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: -5 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+              className="flex flex-col gap-1"
+            >
+              <Skeleton className="h-5 w-32 bg-[#6e85a8]" />
+              <Skeleton className="h-3 w-24 bg-[#6e85a8]" />
+            </motion.div>
+          </div>
+          <div className="flex items-center gap-6">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <Skeleton key={i} className="h-4 w-16 rounded bg-[#6e85a8]" />
+            ))}
+            <Skeleton className="h-6 w-20 bg-[#6e85a8] rounded" />
+            <Skeleton className="h-8 w-8 rounded-full bg-[#6e85a8]" />
+          </div>
+        </div>
+      </header>
+    </>
+  );
+};

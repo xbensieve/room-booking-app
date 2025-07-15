@@ -33,10 +33,10 @@ const WhyUsSection: React.FC = () => {
     <section className="py-16">
       <div className="container mx-auto px-4">
         <div className="text-center mb-10">
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 font-roboto mb-3">
+          <h2 className="text-4xl sm:text-4xl font-bold text-gray-800 font-roboto mb-5">
             Vì sao khách hàng chọn chúng tôi?
           </h2>
-          <p className="text-sm sm:text-base text-gray-600 max-w-xl mx-auto">
+          <p className="text-md sm:text-base text-gray-600 max-w-xl mx-auto">
             Chúng tôi không chỉ cung cấp dịch vụ đặt phòng – chúng tôi mang đến
             sự yên tâm, tiện lợi và trải nghiệm cao cấp cho mỗi chuyến đi của
             bạn.
@@ -47,15 +47,15 @@ const WhyUsSection: React.FC = () => {
           {features.map((feature, index) => (
             <div
               key={index}
-              className="bg-gray-50 rounded-2xl border border-[#feba02] p-6 text-center shadow hover:shadow-lg transition-all duration-300"
+              className="bg-gray-50 rounded-sm border border-[#feba02] p-6 text-center shadow hover:shadow-lg transition-all duration-300"
             >
-              <div className="mx-auto mb-4 w-14 h-14 flex items-center justify-center bg-amber-500 rounded-full shadow-md">
+              <div className="mx-auto mb-4 w-14 h-14 flex items-center justify-center bg-amber-500 rounded-full">
                 {feature.icon}
               </div>
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">
+              <h3 className="text-xl font-semibold text-gray-800 mb-2">
                 {feature.title}
               </h3>
-              <p className="text-gray-600 text-sm">{feature.description}</p>
+              <p className="text-gray-600 text-md">{feature.description}</p>
             </div>
           ))}
         </div>
